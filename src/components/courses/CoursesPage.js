@@ -5,43 +5,15 @@ import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 
 class CoursesPage extends React.Component {
-  state = {
-    course: {
-      title: "",
-    },
-  };
-
-  handleChange = (event) => {
-    const course = { ...this.state.course, title: event.target.value };
-    this.setState({ course: course });
-  };
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-
-    // FLOW:
-    // 2 user clicks button and action is dispatched to action creator
-
-    //debugger;
-    this.props.actions.createCourse(this.state.course);
-  };
-
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <>
         <h1>Courses</h1>
-        <h2>Add Course</h2>
-        <input
-          type="text"
-          onChange={this.handleChange}
-          value={this.state.course.title}
-        />
-        <button type="submit">Save</button>
-        {/* courses is injected in props by mapStateToProps function */}
+
         {this.props.courses.map((course) => (
           <div key={course.title}>{course.title}</div>
         ))}
-      </form>
+      </>
     );
   }
 }
