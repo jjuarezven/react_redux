@@ -17,13 +17,12 @@ class CoursesPage extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    //  since we didn't declare mapDispatchToProps, connect automatically adds Dispatch as a prop
 
     // FLOW:
     // 2 user clicks button and action is dispatched to action creator
 
     //debugger;
-    this.props.dispatch(courseActions.createCourse(this.state.course));
+    this.props.createCourse(this.state.course);
   };
 
   render() {
@@ -48,7 +47,7 @@ class CoursesPage extends React.Component {
 
 CoursesPage.propTypes = {
   courses: PropTypes.array.isRequired,
-  dispatch: PropTypes.func.isRequired,
+  createCourse: PropTypes.func.isRequired,
 };
 
 // this function determines what state is passed to our component via props
@@ -62,6 +61,13 @@ function mapStateToProps(state) {
   };
 }
 
+// this function determines what actions are available on props in our component
+function mapDispatchToProps(dispatch) {
+  return {
+    createCourse: (course) => dispatch(courseActions.createCourse(course)),
+  };
+}
+
 // connect returns a function, that function then calls our component
 // when we omit mapDispatchToProps our component gets a dispatch prop injected automatically
-export default connect(mapStateToProps)(CoursesPage);
+export default connect(mapStateToProps, mapDispatchToProps)(CoursesPage);
