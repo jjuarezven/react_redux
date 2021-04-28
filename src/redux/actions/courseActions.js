@@ -20,6 +20,7 @@ export function loadCourseSuccess(courses) {
 export function loadCourses() {
   // thunk injects dispatch so we don't have to
   return function (dispatch) {
+    debugger;
     return courseApi
       .getCourses()
       .then((courses) => {
