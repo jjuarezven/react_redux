@@ -1,15 +1,27 @@
 import React from "react";
 import { connect } from "react-redux";
 import * as courseActions from "../../redux/actions/courseActions";
+import * as authorActions from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 import CourseList from "./CourseList";
 
 class CoursesPage extends React.Component {
   componentDidMount() {
-    this.props.actions.loadCourses().catch((error) => {
-      alert("Loading courses failed " + error);
-    });
+    const { courses, authors, actions } = this.props;
+
+    // checking courses.length and authors.length helps to avoid making unnecessary API class each time page loads
+    if (courses.length === 0) {
+      actions.loadCourses().catch((error) => {
+        alert("Loading courses failed " + error);
+      });
+    }
+
+    if (authors.length === 0) {
+      actions.loadAuthors().catch((error) => {
+        alert("Loading authors failed " + error);
+      });
+    }
   }
 
   render() {
@@ -24,6 +36,7 @@ class CoursesPage extends React.Component {
 
 CoursesPage.propTypes = {
   courses: PropTypes.array.isRequired,
+  authors: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired,
 };
 
@@ -34,7 +47,19 @@ function mapStateToProps(state) {
   // 5 finally the state contains the course that was added by the reducer
   //debugger;
   return {
-    courses: state.courses,
+    courses:
+      // courses and authors loads async, so we need to validate if authors has data
+      state.authors.length === 0
+        ? []
+        : state.courses.map((course) => {
+            // for each course, we create a copy of the full course item and add the corresponding author name
+            return {
+              ...course,
+              authorName: state.authors.find((x) => x.id === course.authorId)
+                .name,
+            };
+          }),
+    authors: state.authors,
   };
 }
 
@@ -44,7 +69,12 @@ function mapDispatchToProps(dispatch) {
     // manual
     // createCourse: (course) => dispatch(courseActions.createCourse(course)),
     // courseActions contains all actions
-    actions: bindActionCreators(courseActions, dispatch),
+
+    // we can specify what actions to include
+    actions: {
+      loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),
+      loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch),
+    },
   };
 }
 
