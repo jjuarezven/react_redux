@@ -1,13 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import * as courseActions from "../../redux/actions/courseActions";
 import * as authorActions from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
+import { newCourse } from "../../../tools/mockData";
+import CourseForm from "./CourseForm.js";
 
 // {courses, authors, loadCourses, loadAuthors} means we are destructuring props
-function ManageCoursePage({ courses, authors, loadCourses, loadAuthors }) {
+function ManageCoursePage({
+  courses,
+  authors,
+  loadCourses,
+  loadAuthors,
+  ...props
+}) {
+  const [course, setCourse] = useState({ ...props.course });
+  const [errors, setErrors] = useState({});
+
   useEffect(() => {
-    // checking courses.length and authors.length helps to avoid making unnecessary API class each time page loads
     if (courses.length === 0) {
       loadCourses().catch((error) => {
         alert("Loading courses failed " + error);
@@ -21,18 +31,15 @@ function ManageCoursePage({ courses, authors, loadCourses, loadAuthors }) {
     }
   }, []); // empty array means the effect function will execute just once
 
-  return (
-    <>
-      <h1>Manage Course</h1>
-    </>
-  );
+  return <CourseForm course={course} authors={authors} errors={errors} />;
 }
 
 ManageCoursePage.propTypes = {
   courses: PropTypes.array.isRequired,
   authors: PropTypes.array.isRequired,
   loadCourses: PropTypes.func.isRequired,
-  loadAuthors: PropTypes.func.isRequired
+  loadAuthors: PropTypes.func.isRequired,
+  course: PropTypes.object.isRequired
 };
 
 // this function determines what state is passed to our component via props
@@ -46,6 +53,7 @@ function mapStateToProps(state) {
 // this function determines what actions are available on props in our component
 // mapDispatchToProps can be written as object instead of function
 const mapDispatchToProps = {
+  course: newCourse,
   loadCourses: courseActions.loadCourses,
   loadAuthors: authorActions.loadAuthors
 };
