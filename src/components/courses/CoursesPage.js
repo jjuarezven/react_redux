@@ -68,7 +68,7 @@ function mapStateToProps(state) {
             // for each course, we create a copy of the full course item and add the corresponding author name
             return {
               ...course,
-              authorName: state.authors.find((x) => x.id === course.authorId)
+              authorName: state.authors.find((a) => a.id === course.authorId)
                 .name
             };
           }),
