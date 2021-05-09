@@ -5,8 +5,11 @@ import * as authorActions from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 import CourseList from "./CourseList";
+import { Redirect } from "react-router-dom";
 
 class CoursesPage extends React.Component {
+  state = { redirectToAddCoursePage: false };
+
   componentDidMount() {
     const { courses, authors, actions } = this.props;
 
@@ -27,7 +30,17 @@ class CoursesPage extends React.Component {
   render() {
     return (
       <>
+        {this.state.redirectToAddCoursePage && <Redirect to="/course" />}
         <h1>Courses</h1>
+
+        <button
+          style={{ marginBottom: 20 }}
+          className="btn btn-primary add-course"
+          onClick={() => this.setState({ redirectToAddCoursePage: true })}
+        >
+          Add Course
+        </button>
+
         <CourseList courses={this.props.courses} />
       </>
     );
@@ -37,7 +50,7 @@ class CoursesPage extends React.Component {
 CoursesPage.propTypes = {
   courses: PropTypes.array.isRequired,
   authors: PropTypes.array.isRequired,
-  actions: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired
 };
 
 // this function determines what state is passed to our component via props
@@ -56,10 +69,10 @@ function mapStateToProps(state) {
             return {
               ...course,
               authorName: state.authors.find((x) => x.id === course.authorId)
-                .name,
+                .name
             };
           }),
-    authors: state.authors,
+    authors: state.authors
   };
 }
 
@@ -73,8 +86,8 @@ function mapDispatchToProps(dispatch) {
     // we can specify what actions to include
     actions: {
       loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),
-      loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch),
-    },
+      loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch)
+    }
   };
 }
 
