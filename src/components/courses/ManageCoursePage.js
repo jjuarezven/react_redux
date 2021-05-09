@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import * as courseActions from "../../redux/actions/courseActions";
 import * as authorActions from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 
-class ManageCoursePage extends React.Component {
-  componentDidMount() {
-    const { courses, authors, loadCourses, loadAuthors } = this.props;
-
+// {courses, authors, loadCourses, loadAuthors} means we are destructuring props
+function ManageCoursePage({ courses, authors, loadCourses, loadAuthors }) {
+  useEffect(() => {
     // checking courses.length and authors.length helps to avoid making unnecessary API class each time page loads
     if (courses.length === 0) {
       loadCourses().catch((error) => {
@@ -20,21 +19,18 @@ class ManageCoursePage extends React.Component {
         alert("Loading authors failed " + error);
       });
     }
-  }
+  }, []); // empty array means the effect function will execute just once
 
-  render() {
-    return (
-      <>
-        <h1>Manage Course</h1>
-      </>
-    );
-  }
+  return (
+    <>
+      <h1>Manage Course</h1>
+    </>
+  );
 }
 
 ManageCoursePage.propTypes = {
   courses: PropTypes.array.isRequired,
   authors: PropTypes.array.isRequired,
-  actions: PropTypes.object.isRequired,
   loadCourses: PropTypes.func.isRequired,
   loadAuthors: PropTypes.func.isRequired
 };
