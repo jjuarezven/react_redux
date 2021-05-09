@@ -12,6 +12,7 @@ function ManageCoursePage({
   authors,
   loadCourses,
   loadAuthors,
+  saveCourse,
   ...props
 }) {
   const [course, setCourse] = useState({ ...props.course });
@@ -39,12 +40,19 @@ function ManageCoursePage({
     }));
   }
 
+  function handleSave(event) {
+    debugger;
+    event.preventDefault();
+    saveCourse(course);
+  }
+
   return (
     <CourseForm
       course={course}
       authors={authors}
       errors={errors}
       onChange={handleChange}
+      onSave={handleSave}
     />
   );
 }
@@ -54,12 +62,14 @@ ManageCoursePage.propTypes = {
   authors: PropTypes.array.isRequired,
   loadCourses: PropTypes.func.isRequired,
   loadAuthors: PropTypes.func.isRequired,
-  course: PropTypes.object.isRequired
+  course: PropTypes.object.isRequired,
+  saveCourse: PropTypes.func.isRequired
 };
 
 // this function determines what state is passed to our component via props
 function mapStateToProps(state) {
   return {
+    course: newCourse,
     courses: state.courses,
     authors: state.authors
   };
@@ -68,9 +78,9 @@ function mapStateToProps(state) {
 // this function determines what actions are available on props in our component
 // mapDispatchToProps can be written as object instead of function
 const mapDispatchToProps = {
-  course: newCourse,
   loadCourses: courseActions.loadCourses,
-  loadAuthors: authorActions.loadAuthors
+  loadAuthors: authorActions.loadAuthors,
+  saveCourse: courseActions.saveCourse
 };
 
 // connect returns a function, that function then calls our component
