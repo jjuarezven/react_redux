@@ -31,7 +31,22 @@ function ManageCoursePage({
     }
   }, []); // empty array means the effect function will execute just once
 
-  return <CourseForm course={course} authors={authors} errors={errors} />;
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setCourse((prevCourse) => ({
+      ...prevCourse,
+      [name]: name === "authorId" ? parseInt(value, 10) : value
+    }));
+  }
+
+  return (
+    <CourseForm
+      course={course}
+      authors={authors}
+      errors={errors}
+      onChange={handleChange}
+    />
+  );
 }
 
 ManageCoursePage.propTypes = {
