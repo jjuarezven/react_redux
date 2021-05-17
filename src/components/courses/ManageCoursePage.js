@@ -5,6 +5,7 @@ import * as authorActions from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 import { newCourse } from "../../../tools/mockData";
 import CourseForm from "./CourseForm.js";
+import Spinner from "../common/Spinner.js";
 
 // {courses, authors, loadCourses, loadAuthors} means we are destructuring props
 function ManageCoursePage({
@@ -50,7 +51,9 @@ function ManageCoursePage({
     });
   }
 
-  return (
+  return authors.length === 0 || courses.length === 0 ? (
+    <Spinner />
+  ) : (
     <CourseForm
       course={course}
       authors={authors}
