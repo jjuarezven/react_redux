@@ -79,6 +79,7 @@ const getCourseBySlug = (courses, slug) => {
 // this function determines what state is passed to our component via props
 function mapStateToProps(state, ownProps) {
   const slug = ownProps.match.params.slug;
+  // mapStateToProps runs every time redux store changes so when courses are available, getCourseBySlug is called
   const course =
     slug && state.courses.length > 0
       ? getCourseBySlug(state.courses, slug)

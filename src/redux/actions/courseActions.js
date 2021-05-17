@@ -12,14 +12,14 @@ export function loadCourseSuccess(courses) {
 export function updateCourseSuccess(course) {
   return {
     type: types.UPDATE_COURSE_SUCCESS,
-    courses: course
+    course
   };
 }
 
-export function saveCourseSuccess(course) {
+export function createCourseSuccess(course) {
   return {
     type: types.CREATE_COURSE_SUCCESS,
-    courses: course
+    course
   };
 }
 
@@ -45,7 +45,7 @@ export function saveCourse(course) {
       .then((savedCourse) => {
         course.id
           ? dispatch(updateCourseSuccess(savedCourse))
-          : dispatch(saveCourseSuccess(savedCourse));
+          : dispatch(createCourseSuccess(savedCourse));
       })
       .catch((error) => {
         throw error;
