@@ -1,6 +1,7 @@
 // this is the action creator function
 import * as types from "./actionTypes";
 import * as courseApi from "../../api/courseApi";
+import { beginApiCall } from "./apiStatusAction";
 
 export function loadCourseSuccess(courses) {
   return {
@@ -26,6 +27,7 @@ export function createCourseSuccess(course) {
 export function loadCourses() {
   // thunk injects dispatch so we don't have to
   return function (dispatch) {
+    dispatch(beginApiCall());
     return courseApi
       .getCourses()
       .then((courses) => {
@@ -40,6 +42,7 @@ export function loadCourses() {
 export function saveCourse(course) {
   // thunk injects dispatch so we don't have to
   return function (dispatch) {
+    dispatch(beginApiCall());
     return courseApi
       .saveCourse(course)
       .then((savedCourse) => {
