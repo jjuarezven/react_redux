@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { newCourse } from "../../../tools/mockData";
 import CourseForm from "./CourseForm.js";
 import Spinner from "../common/Spinner.js";
+import { toast } from "react-toastify";
 
 // {courses, authors, loadCourses, loadAuthors} means we are destructuring props
 function ManageCoursePage({
@@ -19,6 +20,7 @@ function ManageCoursePage({
 }) {
   const [course, setCourse] = useState({ ...props.course });
   const [errors, setErrors] = useState({});
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (courses.length === 0) {
@@ -46,7 +48,9 @@ function ManageCoursePage({
 
   function handleSave(event) {
     event.preventDefault();
+    setSaving(true);
     saveCourse(course).then(() => {
+      toast.success("Course saved");
       history.push("/courses");
     });
   }
@@ -60,6 +64,7 @@ function ManageCoursePage({
       errors={errors}
       onChange={handleChange}
       onSave={handleSave}
+      saving={saving}
     />
   );
 }
