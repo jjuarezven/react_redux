@@ -7,6 +7,7 @@ import { bindActionCreators } from "redux";
 import CourseList from "./CourseList";
 import { Redirect } from "react-router-dom";
 import Spinner from "../common/Spinner.js";
+import { toast } from "react-toastify";
 
 class CoursesPage extends React.Component {
   state = { redirectToAddCoursePage: false };
@@ -28,6 +29,23 @@ class CoursesPage extends React.Component {
     }
   }
 
+  /* handleDeleteCourse = (course) => {
+    toast.success("Course deleted");
+    this.props.actions.deleteCourse(course).catch((error) => {
+      toast.error("Delete failed: " + error.message, { autoClose: false });
+    });
+  }; */
+
+  // rewrite to use async/await
+  handleDeleteCourse = async (course) => {
+    toast.success("Course deleted");
+    try {
+      await this.props.actions.deleteCourse(course);
+    } catch (error) {
+      toast.error("Delete failed: " + error.message, { autoClose: false });
+    }
+  };
+
   render() {
     return (
       <>
@@ -45,7 +63,10 @@ class CoursesPage extends React.Component {
               Add Course
             </button>
 
-            <CourseList courses={this.props.courses} />
+            <CourseList
+              courses={this.props.courses}
+              onDeleteClick={this.handleDeleteCourse}
+            />
           </>
         )}
       </>
@@ -94,7 +115,8 @@ function mapDispatchToProps(dispatch) {
     // we can specify what actions to include
     actions: {
       loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),
-      loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch)
+      loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch),
+      deleteCourse: bindActionCreators(courseActions.deleteCourse, dispatch)
     }
   };
 }
