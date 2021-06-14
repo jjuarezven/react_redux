@@ -9,7 +9,7 @@ import Spinner from "../common/Spinner.js";
 import { toast } from "react-toastify";
 
 // {courses, authors, loadCourses, loadAuthors} means we are destructuring props
-function ManageCoursePage({
+export function ManageCoursePage({
   courses,
   authors,
   loadCourses,
